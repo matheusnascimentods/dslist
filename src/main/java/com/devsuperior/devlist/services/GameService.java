@@ -1,6 +1,7 @@
 package com.devsuperior.devlist.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,8 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.devlist.dto.GameDTO;
 import com.devsuperior.devlist.dto.GameMinDTO;
+import com.devsuperior.devlist.mapper.GameMapper;
 import com.devsuperior.devlist.model.Game;
-import com.devsuperior.devlist.projection.GameMinProjection;
+import com.devsuperior.devlist.projection.GameProjection;
 import com.devsuperior.devlist.repositories.GameRepository;
 
 @Service
@@ -17,27 +19,24 @@ public class GameService {
 
 	@Autowired
 	private GameRepository repository;
+
+	private final static GameMapper mapper = GameMapper.INSTANCE;
 	
 	@Transactional(readOnly = true)
-	public List<GameMinDTO> findAll() {
-		List<Game> games = repository.findAll();
-		List<GameMinDTO> gamesDTO = games.stream().map(game -> new GameMinDTO(game)).toList();
-		
-		return gamesDTO;
+	public List<GameDTO> get() {
+		List<Game> data = repository.findAll();
+		return data.stream().map(mapper::toDTO).collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public GameDTO findById(Long id) {
-		Game game = repository.findById(id).get();
-		GameDTO dto = new GameDTO(game);
-		
-		return dto;
+	public GameDTO getById(Long id) {
+		Game game = repository.findById(id).get();	
+		return mapper.toDTO(game);
 	}
 	
 	@Transactional(readOnly = true)
-	public List<GameMinDTO> findByList(Long id) {
-		List<GameMinProjection> list = repository.searchByList(id);
-		
-		return list.stream().map(item -> new GameMinDTO(item)).toList();
+	public List<GameDTO> getList(Long id) {
+		List<GameProjection> data = repository.searchByList(id);
+		return data.stream().map(mapper::toDTO).collect(Collectors.toList());
 	}
 }

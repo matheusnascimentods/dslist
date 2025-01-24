@@ -6,6 +6,11 @@ import org.springframework.beans.BeanUtils;
 
 import com.devsuperior.devlist.model.GameList;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor @NoArgsConstructor @Data
 public class GameListDTO {
 	
 	private Long id;

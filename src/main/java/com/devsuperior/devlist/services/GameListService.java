@@ -1,18 +1,22 @@
 package com.devsuperior.devlist.services;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.devlist.dto.GameListDTO;
+import com.devsuperior.devlist.mapper.GameListMapper;
 import com.devsuperior.devlist.model.GameList;
-import com.devsuperior.devlist.projection.GameMinProjection;
+import com.devsuperior.devlist.projection.GameProjection;
 import com.devsuperior.devlist.repositories.GameListRepository;
 import com.devsuperior.devlist.repositories.GameRepository;
 
 @Service
 public class GameListService {
+	
+	private final static GameListMapper mapper = GameListMapper.INSTANCE;
 
 	@Autowired
 	private GameListRepository repository;
@@ -22,16 +26,16 @@ public class GameListService {
 	
 	@Transactional(readOnly = true)
 	public List<GameListDTO> findAll() {
-		List<GameList> lists = repository.findAll();
+		List<GameList> data = repository.findAll();
 		
-		return lists.stream().map(list -> new GameListDTO(list)).toList();
+		return data.stream().map(mapper::toDTO).collect(Collectors.toList());
 	}
 	
 	@Transactional
 	public void replacement (Long listId, int sourceIndex, int destinationIndex) {
-		List<GameMinProjection> list = gameRepository.searchByList(listId);
+		List<GameProjection> list = gameRepository.searchByList(listId);
 		
-		GameMinProjection removed = list.remove(sourceIndex);
+		GameProjection removed = list.remove(sourceIndex);
 		list.add(destinationIndex, removed);
 		
 		int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
