@@ -1,8 +1,10 @@
 package com.devsuperior.devlist.dto;
 
-import com.devsuperior.devlist.model.Game;
-import com.devsuperior.devlist.projection.GameProjection;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor @NoArgsConstructor @Data
 public class GameMinDTO {
 
 	private Long id;
@@ -11,40 +13,4 @@ public class GameMinDTO {
 	private String genre;
 	private String imgUrl;
 	private String shortDescription;
-	
-	public GameMinDTO() {
-	}
-
-	public GameMinDTO(Game entity) {
-		id = entity.getId();
-		title = entity.getTitle();
-		year = entity.getYear();
-		genre = entity.getGenre();
-		imgUrl = entity.getImgUrl();
-		shortDescription = entity.getShortDescription();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public String getGenre() {
-		return genre;
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public String getShortDescription() {
-		return shortDescription;
-	}
 }

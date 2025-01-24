@@ -1,13 +1,13 @@
 package com.devsuperior.devlist.model;
 
-import java.util.Objects;
-
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "tb_belonging")
+@Entity @Table(name = "tb_belonging") @AllArgsConstructor @NoArgsConstructor @Data
 public class Belonging {
 	
 	@EmbeddedId
@@ -15,46 +15,9 @@ public class Belonging {
 	
 	private Integer position;
 
-	public Belonging() {
-	}
-
 	public Belonging(Game game, GameList list, Integer position) {
 		this.id.setGame(game);
 		this.id.setList(list);
 		this.position = position;
 	}
-
-	public BelongingPK getId() {
-		return id;
-	}
-
-	public void setId(BelongingPK id) {
-		this.id = id;
-	}
-
-	public Integer getPosition() {
-		return position;
-	}
-
-	public void setPosition(Integer position) {
-		this.position = position;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Belonging other = (Belonging) obj;
-		return Objects.equals(id, other.id);
-	}
-	
 }
