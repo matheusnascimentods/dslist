@@ -12,9 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.devsuperior.devlist.dto.GameDTO;
+import com.devsuperior.devlist.exception.exceptions.GameListNotFoundException;
+import com.devsuperior.devlist.exception.exceptions.GameNotFoundException;
 import com.devsuperior.devlist.mapper.GameMapper;
 import com.devsuperior.devlist.model.Game;
 import com.devsuperior.devlist.projection.GameProjection;
+import com.devsuperior.devlist.repositories.GameListRepository;
 import com.devsuperior.devlist.repositories.GameRepository;
 
 @Service
@@ -22,6 +25,9 @@ public class GameService {
 
 	@Autowired
 	private GameRepository repository;
+	
+	@Autowired
+	private GameListRepository gameListRepository;
 
 	private final static GameMapper mapper = GameMapper.INSTANCE;
 	
@@ -33,12 +39,20 @@ public class GameService {
 
 	@Transactional(readOnly = true)
 	public GameDTO getById(Long id) {
+		if (!repository.existsById(id)) {
+			throw new GameNotFoundException();
+		}
+		
 		Game game = repository.findById(id).get();	
 		return mapper.toDTO(game);
 	}
 	
 	@Transactional(readOnly = true)
 	public List<GameProjection> getList(Long id) {
+		if(!gameListRepository.existsById(id)) {
+			throw new GameListNotFoundException();
+		}
+		
 		return repository.searchByList(id);
 	}
 	
@@ -53,6 +67,10 @@ public class GameService {
 	
 	@Transactional
 	public ResponseEntity<GameDTO> put(Long id, GameDTO dto) {
+		if (!repository.existsById(id)) {
+			throw new GameNotFoundException();
+		}
+		
 		Game updatedGame = repository.findById(id).map(game -> {
 			BeanUtils.copyProperties(dto, game, "id");
 			return repository.save(game);

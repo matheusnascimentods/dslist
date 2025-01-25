@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.devlist.dto.GameListDTO;
+import com.devsuperior.devlist.exception.exceptions.GameListNotFoundException;
 import com.devsuperior.devlist.mapper.GameListMapper;
 import com.devsuperior.devlist.model.GameList;
 import com.devsuperior.devlist.projection.GameProjection;
@@ -33,6 +34,10 @@ public class GameListService {
 	
 	@Transactional
 	public void replacement (Long listId, int sourceIndex, int destinationIndex) {
+		if (!repository.existsById(listId)) {
+			throw new GameListNotFoundException();
+		}
+		
 		List<GameProjection> list = gameRepository.searchByList(listId);
 		
 		GameProjection removed = list.remove(sourceIndex);

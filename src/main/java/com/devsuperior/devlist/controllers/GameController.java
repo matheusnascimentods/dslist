@@ -18,6 +18,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.devsuperior.devlist.dto.GameDTO;
 import com.devsuperior.devlist.services.GameService;
 
+import jakarta.validation.Valid;
+
 @RestController @RequestMapping(value = "games")
 public class GameController {
 	
@@ -35,12 +37,12 @@ public class GameController {
 	}
 	
 	@PostMapping @ResponseStatus(HttpStatus.CREATED) 
-	public ResponseEntity<GameDTO> post(@RequestBody GameDTO dto, UriComponentsBuilder uri) {
+	public ResponseEntity<GameDTO> post(@Valid @RequestBody GameDTO dto, UriComponentsBuilder uri) {
 		return service.post(dto, uri);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<GameDTO> put(@RequestBody GameDTO dto, @PathVariable Long id) {
+	public ResponseEntity<GameDTO> put(@Valid @RequestBody GameDTO dto, @PathVariable Long id) {
 		return service.put(id, dto);
 	}
 }

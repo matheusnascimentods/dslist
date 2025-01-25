@@ -16,6 +16,8 @@ import com.devsuperior.devlist.projection.GameProjection;
 import com.devsuperior.devlist.services.GameListService;
 import com.devsuperior.devlist.services.GameService;
 
+import jakarta.validation.Valid;
+
 @RestController @RequestMapping(value = "lists")
 public class GameListController {
 	
@@ -36,7 +38,7 @@ public class GameListController {
 	}	
 	
 	@PostMapping(value = "/{listId}/replacement")
-	public void replacement(@PathVariable Long listId, @RequestBody MoveDTO dto) {	
+	public void replacement(@PathVariable Long listId, @Valid @RequestBody MoveDTO dto) {	
 		service.replacement(listId, dto.getSourceIndex(), dto.getDestinationIndex());
 	}	
 }
