@@ -1,6 +1,7 @@
 package com.devsuperior.devlist.services;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,19 +33,15 @@ public class GameService {
 	private final static GameMapper mapper = GameMapper.INSTANCE;
 	
 	@Transactional(readOnly = true)
-	public List<GameDTO> get() {
+	public List<GameDTO> get(Long id) {
+		if (id != null) {
+			if (!repository.existsById(id)) { throw new GameNotFoundException(); }
+	
+			List<Game> data = repository.findById(id).map(Collections::singletonList).orElse(Collections.emptyList());
+			return data.stream().map(mapper::toDTO).collect(Collectors.toList());
+		}
 		List<Game> data = repository.findAll();
 		return data.stream().map(mapper::toDTO).collect(Collectors.toList());
-	}
-
-	@Transactional(readOnly = true)
-	public GameDTO getById(Long id) {
-		if (!repository.existsById(id)) {
-			throw new GameNotFoundException();
-		}
-		
-		Game game = repository.findById(id).get();	
-		return mapper.toDTO(game);
 	}
 	
 	@Transactional(readOnly = true)
@@ -67,9 +64,7 @@ public class GameService {
 	
 	@Transactional
 	public ResponseEntity<GameDTO> put(Long id, GameDTO dto) {
-		if (!repository.existsById(id)) {
-			throw new GameNotFoundException();
-		}
+		if (!repository.existsById(id)) { throw new GameNotFoundException(); }
 		
 		Game updatedGame = repository.findById(id).map(game -> {
 			BeanUtils.copyProperties(dto, game, "id");

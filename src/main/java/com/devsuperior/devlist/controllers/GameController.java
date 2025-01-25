@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,13 +28,8 @@ public class GameController {
 	private GameService service;
 
 	@GetMapping
-	public List<GameDTO> get() {		
-		return service.get();
-	}
-	
-	@GetMapping("/{id}")
-	public GameDTO getById(@PathVariable Long id) {
-		return service.getById(id);
+	public List<GameDTO> get(@RequestParam(required = false) Long id) {		
+		return service.get(id);
 	}
 	
 	@PostMapping @ResponseStatus(HttpStatus.CREATED) 
