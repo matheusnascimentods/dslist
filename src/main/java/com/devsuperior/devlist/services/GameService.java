@@ -46,9 +46,7 @@ public class GameService {
 	
 	@Transactional(readOnly = true)
 	public List<GameProjection> getList(Long id) {
-		if(!gameListRepository.existsById(id)) {
-			throw new GameListNotFoundException();
-		}
+		if(!gameListRepository.existsById(id)) { throw new GameListNotFoundException(); }
 		
 		return repository.searchByList(id);
 	}
@@ -72,5 +70,13 @@ public class GameService {
 		}).get();
 		
 		return ResponseEntity.ok().body(mapper.toDTO(updatedGame));
+	}
+	
+	@Transactional
+	public void delete(Long id) {
+		if (!repository.existsById(id)) { throw new GameNotFoundException(); }
+		
+		gameListRepository.deleteBelonging(id);
+		repository.deleteById(id);
 	}
 }

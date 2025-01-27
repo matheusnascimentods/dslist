@@ -28,8 +28,8 @@ public class GameListController {
 	private GameService gameService;
 
 	@GetMapping
-	public List<GameListDTO> findAll() {		
-		return service.findAll();
+	public List<GameListDTO> get() {		
+		return service.get();
 	}	
 	
 	@GetMapping(value = "/{listId}/games")
