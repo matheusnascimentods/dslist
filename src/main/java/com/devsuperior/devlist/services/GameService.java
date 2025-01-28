@@ -76,7 +76,7 @@ public class GameService {
 	public void delete(Long id) {
 		if (!repository.existsById(id)) { throw new GameNotFoundException(); }
 		
-		gameListRepository.deleteBelonging(id);
+		gameListRepository.deleteGameFromBelonging(id);
 		repository.deleteById(id);
 	}
 }
