@@ -60,4 +60,9 @@ public class GameListController {
 	public void delete(@PathVariable Long id) {
 		service.delete(id);
 	}
+	
+	@DeleteMapping(value = "/remove")
+	public void remove(@RequestBody @Valid BelongingDTO dto) {
+		service.remove(dto);
+	}
 }

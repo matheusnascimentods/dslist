@@ -82,4 +82,13 @@ public class GameListService {
 		repository.deleteListeFromBelonging(id);
 		repository.deleteById(id);
 	}
+
+	@Transactional
+	public void remove(BelongingDTO dto) {
+		if (!repository.existsById(dto.getListId())) { throw new GameListNotFoundException(); }
+		
+		if (!gameRepository.existsById(dto.getGameId())) { throw new GameNotFoundException(); }
+		
+		repository.deleteInBelonging(dto.getGameId(), dto.getListId());
+	}
 }
